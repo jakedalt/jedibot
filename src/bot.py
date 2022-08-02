@@ -3,6 +3,7 @@ import os
 import discord
 from dotenv import load_dotenv
 from onMessage import *
+from dbUtil import *
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -29,6 +30,7 @@ async def on_message(message):
         return
 
     else:
+        await messageReceived(message.author.id)
         response = messageResponse(message.content, message.author)
         if response is not None:
             await message.channel.send(response)
@@ -43,6 +45,9 @@ async def on_voice_state_update(member, before, after):
         boA = before
     else:
         boA = after
+
+    if not member.bot:
+        await vcJoin(member.id)
 
     for role in boA.channel.guild.roles:
         if role.name == 'In Voice Channel':
