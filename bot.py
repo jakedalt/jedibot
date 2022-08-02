@@ -29,7 +29,6 @@ async def on_message(message):
         return
 
     else:
-        print(message)
         response = messageResponse(message.content, message.author)
         if response is not None:
             await message.channel.send(response)
