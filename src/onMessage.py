@@ -10,6 +10,9 @@ def messageResponse(content, author):
             return 'Hi ' + str(user) + '!';
 
     if content.lower().strip() == 'jedibot':
-        return ''
+        return 'What do you want? Try `jedi help` maybe.'
+
+    if content.lower().strip() == 'jedi help':
+        return 'I\'ll implement this soon'
 
     return None
