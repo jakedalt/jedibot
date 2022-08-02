@@ -72,7 +72,7 @@ async def on_voice_state_update(member, before, after):
             if role.name == 'AFK':
                 await member.remove_roles(role, reason='Left AFk')
 
-    elif after.channel.id == 1003898160462180352:
+    elif after.channel.id == 672976147218300951:
         for role in after.channel.guild.roles:
             if role.name == 'In Voice Channel':
                 await member.remove_roles(role, reason='Left voice')
