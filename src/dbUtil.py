@@ -27,6 +27,10 @@ async def vcJoin(discord_id):
 
     conn.commit()
 
+    cursor.execute('UPDATE ' + TABLE + ' SET vc_joins = vc_joins + 1 WHERE id =' + str(discord_id))
+
+    conn.commit()
+
     conn.close()
 
     return result
