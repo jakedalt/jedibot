@@ -10,10 +10,10 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 
 client = discord.Client()
 
-
 @client.event
 async def on_ready():
     print(f'{client.user} has connected to Discord!')
+    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="for jedi help"))
 
 
 @client.event
@@ -31,9 +31,12 @@ async def on_message(message):
 
     else:
         await messageReceived(message.author.id)
-        response = messageResponse(message.content, message.author)
+        response = messageResponse(discord, message.content, message.author)
         if response is not None:
-            await message.channel.send(response)
+            if type(response) == discord.Embed:
+                await message.channel.send(embed=response)
+            else:
+                await message.channel.send(response)
 
 
 @client.event
