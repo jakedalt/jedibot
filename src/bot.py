@@ -46,9 +46,6 @@ async def on_voice_state_update(member, before, after):
     else:
         boA = after
 
-    if not member.bot:
-        await vcJoin(member.id)
-
     for role in boA.channel.guild.roles:
         if role.name == 'In Voice Channel':
             ivc = True
@@ -71,6 +68,8 @@ async def on_voice_state_update(member, before, after):
                 await member.remove_roles(role, reason='Left AFk')
 
     elif after.channel.id == 672976147218300951:
+        if not member.bot:
+            await vcJoin(member.id)
         for role in after.channel.guild.roles:
             if role.name == 'In Voice Channel':
                 await member.remove_roles(role, reason='Left voice')
@@ -82,6 +81,8 @@ async def on_voice_state_update(member, before, after):
         await member.add_roles(afkrole, reason='Joined AFK')
 
     else:
+        if not member.bot:
+            await vcJoin(member.id)
         for role in after.channel.guild.roles:
             if role.name == 'AFK':
                 await member.remove_roles(role, reason='Left AFk')
