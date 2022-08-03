@@ -6,7 +6,7 @@ def messageResponse(content, author):
         user = author.nick
 
     if 'jedibot' in content.lower():
-        if 'hello' or 'hi' or 'hey' or 'yo' in content.lower():
+        if ('hello' or 'hi' or 'hey' or 'yo') in content.lower():
             return 'Hi ' + str(user) + '!';
 
     if content.lower().strip() == 'jedibot':
