@@ -68,3 +68,27 @@ async def messageReceived(discord_id):
     conn.close()
 
     return result
+
+def getUserStats(discord_id):
+    load_dotenv()
+    UN = os.getenv('DB_USERNAME')
+    PW = os.getenv('DB_PASSWORD')
+    SCHEMA = os.getenv('SCHEMA')
+    TABLE = os.getenv('TABLE')
+
+    conn = psycopg2.connect(
+        database="d5nlcc5k9d83qo", user=UN, password=PW, host='ec2-3-213-228-206.compute-1.amazonaws.com',
+        port='5432'
+    )
+
+    cursor = conn.cursor()
+
+    cursor.execute('SET SCHEMA \'' + SCHEMA + '\'')
+
+    cursor.execute('SELECT messages_sent, vc_joins from ' + TABLE + ' WHERE id=' + str(discord_id))
+
+    result = cursor.fetchone()
+
+    conn.close()
+
+    return result
