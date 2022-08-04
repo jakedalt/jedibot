@@ -23,7 +23,7 @@ async def messageResponse(discord, client, message):
                                                                 'of my numerous commands\n\nUsage: `jedi '
                                                                 '<command>` or `@JediBot <command>`',
                               color=discord.Color.gold())
-        embed.add_field(name='Commands:', value='`help`\n`stats`\n\n`kanye`\n`checkme`')
+        embed.add_field(name='Commands:', value='`help`\n`stats`\n\n`kanye`\n`checkme`\n`yt <youtube search>`')
         return embed
 
     if content.lower().strip() == 'jedi stats' or content.lower().strip() == 'jedistats':
