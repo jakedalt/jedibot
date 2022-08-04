@@ -1,4 +1,5 @@
 from dbUtil import *
+from api import *
 
 def messageResponse(discord, content, author):
 
@@ -31,5 +32,8 @@ def messageResponse(discord, content, author):
         embed.add_field(name='Voice Channel Joins', value=stats[1], inline=True)
 
         return embed
+
+    if content.lower().strip() == 'jedi kanye':
+        return kanye()['quote']
 
     return None
