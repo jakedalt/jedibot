@@ -1,22 +1,27 @@
 from dbUtil import *
 from api import *
 
-def messageResponse(discord, content, author):
+def messageResponse(discord, client, content, author):
+
+    content = content.replace('<@' + str(client.user.id) + '>', 'jedi')
 
     if author.nick == None:
         user = author.name
     else:
         user = author.nick
 
-    if 'jedibot' in content.lower():
+    if 'jedi' in content.lower():
         if 'hello' in content.lower() or 'hi' in content.lower() or 'hey' in content.lower() or 'yo' in content.lower():
             return 'Hi ' + str(user) + '!';
 
-    if content.lower().strip() == 'jedibot':
+    if content.lower().strip() == 'jedi':
         return 'What do you want? Try `jedi help` maybe.'
 
     if content.lower().strip() == 'jedi help':
-        embed = discord.Embed(title='JediBot Help', description='Oh my! You are in need of assistance? Try using one of my numerous commands\n\nUsage: `jedi <command>`',color=discord.Color.gold())
+        embed = discord.Embed(title='JediBot Help', description='Oh my! You are in need of assistance? Try using one '
+                                                                'of my numerous commands\n\nUsage: `jedi '
+                                                                '<command>` or `@JediBot <command>`',
+                              color=discord.Color.gold())
         embed.add_field(name='Commands:', value='`help`\n`stats`')
         return embed
 

@@ -56,7 +56,7 @@ async def on_message(message):
 
     else:
         await messageReceived(message.author.id)
-        response = messageResponse(discord, message.content, message.author)
+        response = messageResponse(discord, client, message.content, message.author)
         if response is not None:
             if type(response) == discord.Embed:
                 await message.channel.send(embed=response)
