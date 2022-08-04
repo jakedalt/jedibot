@@ -4,6 +4,7 @@ import discord
 from dotenv import load_dotenv
 from onMessage import *
 from dbUtil import *
+from api import *
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -18,10 +19,34 @@ async def on_ready():
 
 @client.event
 async def on_member_join(member):
-    await member.create_dm()
-    await member.dm_channel.send(
-        f'Hello there, {member.name}! True Jedi welcomes you.'
-    )
+    report = backgroundCheck(member.id)
+    if not report['blacklisted']:
+        if report['reports'] == 0:
+            await member.create_dm()
+            await member.dm_channel.send(
+                f'Hello there, {member.name}! True Jedi welcomes you.'
+            )
+            channel = member.guild.text_channels[0]
+            if channel is not None:
+                channel.send('Everyone welcome ' +
+                             member.name + ' to True Jedi! They passed my background check with flying colors.')
+        else:
+            await member.create_dm()
+            await member.dm_channel.send(
+                f'Hello there, {member.name}! True Jedi welcomes you. You do have some reports, but if you are well '
+                f'behaved, we will love having you on True Jedi '
+            )
+            channel = member.guild.text_channels[0]
+            if channel is not None:
+                channel.send(member.name + ' has joined True Jedi. My background check dug up ' +
+                             str(report['reports']) +
+                             ' reports. There is a good chance that these reports were not substantial.')
+    else:
+        channel = member.guild.text_channels[0]
+        if channel is not None:
+            channel.send('***WARNING!***')
+            channel.send('WARNING! ' + member.name + ' is known to be a dangerous and blacklisted Discord user with ' +
+                         str(report['reports']) + '. Blacklist reason: ' + str(report['blacklist_reason']))
 
 
 @client.event
