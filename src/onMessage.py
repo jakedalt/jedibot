@@ -41,6 +41,6 @@ def messageResponse(discord, content, author):
         if not response['blacklisted']:
             return 'You have been reported ' + str(response['reports']) + ' times. You\'re also not blacklisted'
         else:
-            return 'YOU ARE BLACKLISTED. YOU SHOULD BE BANNED. Reports: ' + str(response['reports'])
+            return 'YOU ARE BLACKLISTED. YOU SHOULD BE BANNED. Reason: ' + str(response['blacklist_reason'])
 
     return None

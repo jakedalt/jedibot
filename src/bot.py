@@ -33,8 +33,8 @@ async def on_member_join(member):
         else:
             await member.create_dm()
             await member.dm_channel.send(
-                f'Hello there, {member.name}! True Jedi welcomes you. You do have some reports, but if you are well '
-                f'behaved, we will love having you on True Jedi '
+                f'Hello there, {member.name}! True Jedi welcomes you. You do have some reports, but if you are well-'
+                f'behaved, we will love having you on True Jedi'
             )
             channel = member.guild.text_channels[0]
             if channel is not None:
