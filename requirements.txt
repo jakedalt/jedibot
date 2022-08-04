@@ -2,3 +2,4 @@ discord.py
 python-dotenv
 psycopg2
 requests
+youtube-dl

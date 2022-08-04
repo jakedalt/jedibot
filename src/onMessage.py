@@ -1,17 +1,18 @@
 from dbUtil import *
 from api import *
+from youtubePlayer import *
 
-def messageResponse(discord, client, content, author):
+async def messageResponse(discord, client, message):
 
-    content = content.replace('<@' + str(client.user.id) + '>', 'jedi')
+    content = message.content.replace('<@' + str(client.user.id) + '>', 'jedi')
 
-    if author.nick == None:
-        user = author.name
+    if message.author.nick == None:
+        user = message.author.name
     else:
-        user = author.nick
+        user = message.author.nick
 
     if 'jedi' in content.lower():
-        if 'hello' in content.lower() or 'hi' in content.lower() or 'hey' in content.lower() or 'yo' in content.lower():
+        if 'hello' in content.lower() or 'hi' in content.lower() or 'hey' in content.lower():
             return 'Hi ' + str(user) + '!';
 
     if content.lower().strip() == 'jedi':
@@ -26,9 +27,10 @@ def messageResponse(discord, client, content, author):
         return embed
 
     if content.lower().strip() == 'jedi stats' or content.lower().strip() == 'jedistats':
-        stats = getUserStats(author.id)
+        stats = getUserStats(message.author.id)
         if stats is None:
-            print('stat error, getUserStats returned None: ' + str(author.name) + ' id: ' + str(author.id))
+            print('stat error, getUserStats returned None: ' + str(message.author.name) + ' id: '
+                  + str(message.author.id))
             return 'Something must be wrong, because you don\'t have any stats.'
         embed = discord.Embed(title=str(user) + '\'s Stats',
                               description='*in the JediBot era*',
@@ -41,8 +43,12 @@ def messageResponse(discord, client, content, author):
     if content.lower().strip() == 'jedi kanye':
         return kanye()['quote']
 
+    if 'jedi yt ' in content.lower().strip():
+        response = await geturl(content)
+        return response
+
     if content.lower().strip() == 'jedi checkme':
-        response = backgroundCheck(author.id)
+        response = backgroundCheck(message.author.id)
         if not response['blacklisted']:
             return 'You have been reported ' + str(response['reports']) + ' times. You\'re also not blacklisted'
         else:

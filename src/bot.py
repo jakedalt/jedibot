@@ -1,6 +1,7 @@
 import os
 
 import discord
+from discord.ext import tasks
 from dotenv import load_dotenv
 from onMessage import *
 from dbUtil import *
@@ -15,7 +16,12 @@ client = discord.Client()
 async def on_ready():
     print(f'{client.user} has connected to Discord!')
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="for jedi help"))
+    daily_job.start()
 
+
+@tasks.loop(hours=24)
+async def daily_job():
+    print('Daily job commenced')
 
 @client.event
 async def on_member_join(member):
@@ -56,7 +62,7 @@ async def on_message(message):
 
     else:
         await messageReceived(message.author.id)
-        response = messageResponse(discord, client, message.content, message.author)
+        response = await messageResponse(discord, client, message)
         if response is not None:
             if type(response) == discord.Embed:
                 await message.channel.send(embed=response)
@@ -120,6 +126,5 @@ async def on_voice_state_update(member, before, after):
                 if role.name == 'In Voice Channel':
                     ivcrole = role
         await member.add_roles(ivcrole, reason='Joined voice')
-
 
 client.run(TOKEN)
