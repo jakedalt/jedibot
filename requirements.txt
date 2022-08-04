@@ -2,4 +2,3 @@ discord.py
 python-dotenv
 psycopg2
 requests
-urllib
