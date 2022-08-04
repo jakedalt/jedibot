@@ -1,18 +1,32 @@
 import psycopg2
 import os
 from dotenv import load_dotenv
+from urllib.parse import urlparse
+
+def getConnFromUrl():
+    load_dotenv()
+    DATABASE_URL = os.getenv('DATABASE_URL')
+    result = urlparse(DATABASE_URL)
+    username = result.username
+    password = result.password
+    database = result.path[1:]
+    hostname = result.hostname
+    port = result.port
+    return psycopg2.connect(
+        database=database,
+        user=username,
+        password=password,
+        host=hostname,
+        port=port,
+        sslmode='require'
+    )
 
 async def vcJoin(discord_id):
     load_dotenv()
-    UN = os.getenv('DB_USERNAME')
-    PW = os.getenv('DB_PASSWORD')
     SCHEMA = os.getenv('SCHEMA')
     TABLE = os.getenv('TABLE')
 
-    conn = psycopg2.connect(
-        database="d5nlcc5k9d83qo", user=UN, password=PW, host='ec2-3-213-228-206.compute-1.amazonaws.com',
-        port='5432'
-    )
+    conn = getConnFromUrl()
 
     cursor = conn.cursor()
 
@@ -37,15 +51,10 @@ async def vcJoin(discord_id):
 
 async def messageReceived(discord_id):
     load_dotenv()
-    UN = os.getenv('DB_USERNAME')
-    PW = os.getenv('DB_PASSWORD')
     SCHEMA = os.getenv('SCHEMA')
     TABLE = os.getenv('TABLE')
 
-    conn = psycopg2.connect(
-        database="d5nlcc5k9d83qo", user=UN, password=PW, host='ec2-3-213-228-206.compute-1.amazonaws.com',
-        port='5432'
-    )
+    conn = conn = getConnFromUrl()
 
     cursor = conn.cursor()
 
@@ -71,15 +80,10 @@ async def messageReceived(discord_id):
 
 def getUserStats(discord_id):
     load_dotenv()
-    UN = os.getenv('DB_USERNAME')
-    PW = os.getenv('DB_PASSWORD')
     SCHEMA = os.getenv('SCHEMA')
     TABLE = os.getenv('TABLE')
 
-    conn = psycopg2.connect(
-        database="d5nlcc5k9d83qo", user=UN, password=PW, host='ec2-3-213-228-206.compute-1.amazonaws.com',
-        port='5432'
-    )
+    conn = getConnFromUrl()
 
     cursor = conn.cursor()
 
