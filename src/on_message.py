@@ -1,19 +1,20 @@
-from dbUtil import *
-from api import *
-from youtubePlayer import *
+from dbUtil import get_user_stats
+from api import backgroundCheck, kanye
+from youtubePlayer import geturl
 
-async def messageResponse(discord, client, message):
+
+async def message_response(discord, client, message):
 
     content = message.content.replace('<@' + str(client.user.id) + '>', 'jedi')
 
-    if message.author.nick == None:
+    if message.author.nick is None:
         user = message.author.name
     else:
         user = message.author.nick
 
     if 'jedi' in content.lower():
         if 'hello' in content.lower() or 'hi' in content.lower() or 'hey' in content.lower():
-            return 'Hi ' + str(user) + '!';
+            return 'Hi ' + str(user) + '!'
 
     if content.lower().strip() == 'jedi':
         return 'What do you want? Try `jedi help` maybe.'
@@ -27,7 +28,7 @@ async def messageResponse(discord, client, message):
         return embed
 
     if content.lower().strip() == 'jedi stats' or content.lower().strip() == 'jedistats':
-        stats = getUserStats(message.author.id)
+        stats = get_user_stats(message.author.id)
         if stats is None:
             print('stat error, getUserStats returned None: ' + str(message.author.name) + ' id: '
                   + str(message.author.id))
