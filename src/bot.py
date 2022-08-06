@@ -75,7 +75,7 @@ async def on_message(message):
         return
 
     else:
-        await message_received(message.author.id)
+        await message_received(message.author.id, message.author.name)
         response = await message_response(discord, client, message)
         if response is not None:
             if type(response) == discord.Embed:
@@ -127,7 +127,7 @@ async def on_voice_state_update(member, before, after):
 
     elif after.channel.id == 672976147218300951:
         if not member.bot:
-            await vc_join(member.id)
+            await vc_join(member.id, member.name)
         for role in after.channel.guild.roles:
             if role.name == 'In Voice Channel':
                 await member.remove_roles(role, reason='Left voice')
@@ -140,7 +140,7 @@ async def on_voice_state_update(member, before, after):
 
     else:
         if not member.bot:
-            await vc_join(member.id)
+            await vc_join(member.id, member.name)
         for role in after.channel.guild.roles:
             if role.name == 'AFK':
                 await member.remove_roles(role, reason='Left AFk')
