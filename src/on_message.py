@@ -1,6 +1,6 @@
-from dbUtil import get_user_stats
-from api import backgroundCheck, kanye
-from youtubePlayer import geturl
+from db_util import get_user_stats
+from api import background_check, kanye
+from youtube_player import geturl
 
 
 async def message_response(discord, client, message):
@@ -49,7 +49,7 @@ async def message_response(discord, client, message):
         return response
 
     if content.lower().strip() == 'jedi checkme':
-        response = backgroundCheck(message.author.id)
+        response = background_check(message.author.id)
         if not response['blacklisted']:
             return 'You have been reported ' + str(response['reports']) + ' times. You\'re also not blacklisted'
         else:

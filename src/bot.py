@@ -1,16 +1,17 @@
 import os
-
 import discord
 from discord.ext import tasks
 from dotenv import load_dotenv
-from onMessage import *
-from dbUtil import *
-from api import *
+from on_message import message_response
+from db_util import message_received, vc_join
+from api import background_check
+
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
 client = discord.Client()
+
 
 @client.event
 async def on_ready():
@@ -23,9 +24,10 @@ async def on_ready():
 async def daily_job():
     print('Daily job commenced')
 
+
 @client.event
 async def on_member_join(member):
-    report = backgroundCheck(member.id)
+    report = background_check(member.id)
     if not report['blacklisted']:
         if report['reports'] == 0:
             await member.create_dm()
@@ -61,8 +63,8 @@ async def on_message(message):
         return
 
     else:
-        await messageReceived(message.author.id)
-        response = await messageResponse(discord, client, message)
+        await message_received(message.author.id)
+        response = await message_response(discord, client, message)
         if response is not None:
             if type(response) == discord.Embed:
                 await message.channel.send(embed=response)
@@ -76,22 +78,32 @@ async def on_voice_state_update(member, before, after):
     afk = False
 
     if after.channel is None:
-        boA = before
+        preposition = before
     else:
-        boA = after
+        preposition = after
 
-    for role in boA.channel.guild.roles:
+    for role in preposition.channel.guild.roles:
         if role.name == 'In Voice Channel':
             ivc = True
             afk = True
     if not ivc:
-        await boA.channel.guild.create_role(name='In Voice Channel', permissions=discord.Permissions.none(),
-                                              colour=discord.Colour(0x2ecc71), hoist=True, mentionable=True,
-                                              reason='IVC needed')
+        await preposition.channel.guild.create_role(
+            name='In Voice Channel',
+            permissions=discord.Permissions.none(),
+            colour=discord.Colour(0x2ecc71),
+            hoist=True,
+            mentionable=True,
+            reason='IVC needed'
+        )
     if not afk:
-        await boA.channel.guild.create_role(name='AFK', permissions=discord.Permissions.none(),
-                                              colour=discord.Colour(0xbf0000), hoist=True, mentionable=True,
-                                              reason='AFK needed')
+        await preposition.channel.guild.create_role(
+            name='AFK',
+            permissions=discord.Permissions.none(),
+            colour=discord.Colour(0xbf0000),
+            hoist=True,
+            mentionable=True,
+            reason='AFK needed'
+        )
 
     if after.channel is None:
         for role in before.channel.guild.roles:
@@ -103,28 +115,28 @@ async def on_voice_state_update(member, before, after):
 
     elif after.channel.id == 672976147218300951:
         if not member.bot:
-            await vcJoin(member.id)
+            await vc_join(member.id)
         for role in after.channel.guild.roles:
             if role.name == 'In Voice Channel':
                 await member.remove_roles(role, reason='Left voice')
 
-            afkrole = None
-            for role in after.channel.guild.roles:
-                if role.name == 'AFK':
-                    afkrole = role
-        await member.add_roles(afkrole, reason='Joined AFK')
+            afk_role = None
+            for role1 in after.channel.guild.roles:
+                if role1.name == 'AFK':
+                    afk_role = role1
+        await member.add_roles(afk_role, reason='Joined AFK')
 
     else:
         if not member.bot:
-            await vcJoin(member.id)
+            await vc_join(member.id)
         for role in after.channel.guild.roles:
             if role.name == 'AFK':
                 await member.remove_roles(role, reason='Left AFk')
 
-            ivcrole = None
-            for role in after.channel.guild.roles:
-                if role.name == 'In Voice Channel':
-                    ivcrole = role
-        await member.add_roles(ivcrole, reason='Joined voice')
+            ivc_role = None
+            for role1 in after.channel.guild.roles:
+                if role1.name == 'In Voice Channel':
+                    ivc_role = role1
+        await member.add_roles(ivc_role, reason='Joined voice')
 
 client.run(TOKEN)
