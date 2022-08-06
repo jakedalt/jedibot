@@ -17,12 +17,24 @@ client = discord.Client()
 async def on_ready():
     print(f'{client.user} has connected to Discord!')
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="for jedi help"))
+    print('connected to servers ' + str(client.guilds))
     daily_job.start()
 
 
 @tasks.loop(hours=24)
 async def daily_job():
     print('Daily job commenced')
+
+@client.event
+async def on_guild_join(guild):
+    if guild.id == 425799350573334528 or guild.id == 1003874309640564847:
+        print('added to familiar guild')
+        await guild.text_channels[0].send('I\'m back. What did I miss?')
+    else:
+        await guild.text_channels[0].send('I\'m sorry,'
+                                          ' I\'m not meant to be here. I belong on the True Jedi server only.')
+        print('added to unfamiliar guild ' + str(guild) + ': owner:' + str(guild.owner) + '\n' + str(guild.members))
+        await guild.leave()
 
 
 @client.event
