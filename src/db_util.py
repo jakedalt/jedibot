@@ -3,9 +3,14 @@ import os
 from dotenv import load_dotenv
 from urllib.parse import urlparse
 
-def getConnFromUrl():
-    load_dotenv()
-    DATABASE_URL = os.getenv('DATABASE_URL')
+
+load_dotenv()
+DATABASE_URL = os.getenv('DATABASE_URL')
+SCHEMA = os.getenv('SCHEMA')
+TABLE = os.getenv('TABLE')
+
+
+def get_conn_from_url():
     result = urlparse(DATABASE_URL)
     username = result.username
     password = result.password
@@ -21,12 +26,9 @@ def getConnFromUrl():
         sslmode='require'
     )
 
-async def vcJoin(discord_id):
-    load_dotenv()
-    SCHEMA = os.getenv('SCHEMA')
-    TABLE = os.getenv('TABLE')
 
-    conn = getConnFromUrl()
+async def vc_join(discord_id):
+    conn = get_conn_from_url()
 
     cursor = conn.cursor()
 
@@ -34,7 +36,7 @@ async def vcJoin(discord_id):
 
     cursor.execute('SELECT * from ' + TABLE + ' WHERE id=' + str(discord_id))
 
-    result = cursor.fetchone();
+    result = cursor.fetchone()
 
     if result is None:
         cursor.execute('INSERT INTO ' + TABLE + '(id) VALUES (' + str(discord_id) + ')')
@@ -49,12 +51,9 @@ async def vcJoin(discord_id):
 
     return result
 
-async def messageReceived(discord_id):
-    load_dotenv()
-    SCHEMA = os.getenv('SCHEMA')
-    TABLE = os.getenv('TABLE')
 
-    conn = conn = getConnFromUrl()
+async def message_received(discord_id):
+    conn = get_conn_from_url()
 
     cursor = conn.cursor()
 
@@ -63,7 +62,7 @@ async def messageReceived(discord_id):
     cursor.execute('''SELECT * from test
     WHERE id=''' + str(discord_id))
 
-    result = cursor.fetchone();
+    result = cursor.fetchone()
 
     if result is None:
         cursor.execute('INSERT INTO ' + TABLE + '(id) VALUES (' + str(discord_id) + ')')
@@ -78,12 +77,9 @@ async def messageReceived(discord_id):
 
     return result
 
-def getUserStats(discord_id):
-    load_dotenv()
-    SCHEMA = os.getenv('SCHEMA')
-    TABLE = os.getenv('TABLE')
 
-    conn = getConnFromUrl()
+def get_user_stats(discord_id):
+    conn = get_conn_from_url()
 
     cursor = conn.cursor()
 
