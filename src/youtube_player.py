@@ -3,10 +3,8 @@ import urllib.parse
 import urllib.request
 
 
-async def geturl(content):
-    music_name = content.strip('jedi yt ')
-
-    query_string = urllib.parse.urlencode({"search_query": music_name})
+async def geturl(query):
+    query_string = urllib.parse.urlencode({"search_query": query})
 
     format_url = urllib.request.urlopen("https://www.youtube.com/results?" + query_string)
 

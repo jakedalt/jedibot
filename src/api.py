@@ -1,10 +1,6 @@
-import os
 import requests
-from dotenv import load_dotenv
 
-
-load_dotenv()
-DD_KEY = os.getenv('DD_KEY')
+from constants import DD_KEY
 
 
 def kanye():
