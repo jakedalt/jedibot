@@ -1,3 +1,6 @@
+import sys
+import traceback
+
 import discord
 
 from discord.ext import commands
@@ -107,6 +110,9 @@ def register_commands(bot):
         if isinstance(error, commands.MissingRequiredArgument):
             message = f"Usage: `{ctx.bot.command_prefix}{ctx.command.qualified_name} {ctx.command.signature}`"
         else:
+            # print traceback for logging purposes
+            print(f"Handled exception in command '{ctx.command}':", file=sys.stderr)
+            traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
             message = f'Error: {error}'
         await ctx.send(message)
 
