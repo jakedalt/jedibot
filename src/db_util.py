@@ -1,13 +1,7 @@
 import psycopg2
-import os
-from dotenv import load_dotenv
+
 from urllib.parse import urlparse
-
-
-load_dotenv()
-DATABASE_URL = os.getenv('DATABASE_URL')
-SCHEMA = os.getenv('SCHEMA')
-TABLE = os.getenv('TABLE')
+from constants import DATABASE_URL, SCHEMA, TABLE
 
 
 def get_conn_from_url():
