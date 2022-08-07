@@ -68,7 +68,7 @@ def register_events(bot):
         if message.author.bot:
             return  # ignore bot messages
 
-        await message_received(message.author.id)
+        await message_received(message.author.id, message.author.name)
         content = message.content.replace('<@' + str(bot.user.id) + '>', 'jedi').lower()
 
         if 'jedi' in content and any(greeting in content for greeting in ['hello', 'hi', 'hey']):
@@ -121,7 +121,7 @@ def register_events(bot):
 
         elif after.channel.id == 672976147218300951:
             if not member.bot:
-                await vc_join(member.id)
+                await vc_join(member.id, member.name)
             for role in after.channel.guild.roles:
                 if role.name == 'In Voice Channel':
                     await member.remove_roles(role, reason='Left voice')
@@ -134,7 +134,7 @@ def register_events(bot):
 
         else:
             if not member.bot:
-                await vc_join(member.id)
+                await vc_join(member.id, member.name)
             for role in after.channel.guild.roles:
                 if role.name == 'AFK':
                     await member.remove_roles(role, reason='Left AFk')

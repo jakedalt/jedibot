@@ -21,7 +21,7 @@ def get_conn_from_url():
     )
 
 
-async def vc_join(discord_id):
+async def vc_join(discord_id, username):
     conn = get_conn_from_url()
 
     cursor = conn.cursor()
@@ -33,7 +33,8 @@ async def vc_join(discord_id):
     result = cursor.fetchone()
 
     if result is None:
-        cursor.execute('INSERT INTO ' + TABLE + '(id) VALUES (' + str(discord_id) + ')')
+        cursor.execute('INSERT INTO ' +
+                       TABLE + '(id, username) VALUES (' + str(discord_id) + ', \'' + str(username) + '\');')
 
     conn.commit()
 
@@ -46,7 +47,7 @@ async def vc_join(discord_id):
     return result
 
 
-async def message_received(discord_id):
+async def message_received(discord_id, username):
     conn = get_conn_from_url()
 
     cursor = conn.cursor()
@@ -59,7 +60,8 @@ async def message_received(discord_id):
     result = cursor.fetchone()
 
     if result is None:
-        cursor.execute('INSERT INTO ' + TABLE + '(id) VALUES (' + str(discord_id) + ')')
+        cursor.execute('INSERT INTO ' +
+                       TABLE + '(id, username) VALUES (' + str(discord_id) + ', \'' + str(username) + '\');')
 
     conn.commit()
 
