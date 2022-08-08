@@ -1,3 +1,6 @@
+import sys
+import traceback
+
 import discord
 
 from discord.ext import commands
@@ -21,6 +24,7 @@ class JediHelpCommand(commands.DefaultHelpCommand):
 def register_commands(bot):
 
     bot.help_command = JediHelpCommand()  # register custom help command
+    bot.description = "Oh my! You are in need of assistance? Try using one of my numerous commands."
 
     @bot.command()
     async def info(ctx):
@@ -90,12 +94,26 @@ def register_commands(bot):
         """
         await ctx.send(kanye()['quote'])
 
-    @bot.command(aliases=['yt'])
-    async def youtube(ctx, query):
+    @bot.command(aliases=['yt'], rest_is_raw=True)
+    async def youtube(ctx, search_term, *other_search_terms):
         """Searches YouTube so you don't have to (Surround term in quotes to search multiple words)
 
+        :param search_term: (required) search term
+        :param other_search_terms: (optional) more terms to include in search
         :param ctx: calling context
-        :param query: phrase to search with
         """
-        response = await geturl(query)
+        response = await geturl(' '.join((search_term, *other_search_terms)))
         await ctx.send(response)
+
+    async def on_command_error(ctx, error):
+        # TODO see https://discordpy.readthedocs.io/en/stable/ext/commands/api.html#exceptions for more exceptions
+        if isinstance(error, commands.MissingRequiredArgument):
+            message = f"Usage: `{ctx.bot.command_prefix}{ctx.command.qualified_name} {ctx.command.signature}`"
+        else:
+            # print traceback for logging purposes
+            print(f"Handled exception in command '{ctx.command}':", file=sys.stderr)
+            traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
+            message = f'Error: {error}'
+        await ctx.send(message)
+
+    bot.on_command_error = on_command_error
