@@ -12,6 +12,7 @@ DATABASE_URL = os.getenv('DATABASE_URL')
 SCHEMA = os.getenv('SCHEMA')
 TABLE = os.getenv('TABLE')
 
+GREETINGS = ['hello', 'hi', 'hey', 'yo']
 
 
 

@@ -3,6 +3,7 @@ import discord
 from discord.ext import tasks
 from api import background_check
 from db_util import message_received, vc_join
+from constants import GREETINGS
 
 
 @tasks.loop(hours=24)
@@ -71,7 +72,7 @@ def register_events(bot):
         await message_received(message.author.id, message.author.name)
         content = message.content.replace('<@' + str(bot.user.id) + '>', 'jedi').lower()
 
-        if 'jedi' in content and any(greeting in content for greeting in ['hello', 'hi', 'hey']):
+        if 'jedi' in content and any(greeting in content for greeting in GREETINGS):
             user = message.author.nick if message.author.nick is not None else message.author.name
             await message.channel.send('Hi ' + str(user) + '!')
 
