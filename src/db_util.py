@@ -34,7 +34,8 @@ async def vc_join(discord_id, username):
 
     if result is None:
         cursor.execute('INSERT INTO ' +
-                       TABLE + '(id, username) VALUES (' + str(discord_id) + ', \'' + str(username) + '\');')
+                       TABLE + '(id, username) VALUES (' + str(discord_id) + ', \'' + str(username.replace('\'', '')) +
+                       '\');')
 
     conn.commit()
 
@@ -60,7 +61,8 @@ async def message_received(discord_id, username):
 
     if result is None:
         cursor.execute('INSERT INTO ' +
-                       TABLE + '(id, username) VALUES (' + str(discord_id) + ', \'' + str(username) + '\');')
+                       TABLE + '(id, username) VALUES (' + str(discord_id) + ', \'' + str(username.replace('\'', '')) +
+                       '\');')
 
     conn.commit()
 
