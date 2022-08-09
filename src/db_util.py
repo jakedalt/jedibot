@@ -54,8 +54,7 @@ async def message_received(discord_id, username):
 
     cursor.execute('SET SCHEMA \'' + SCHEMA + '\'')
 
-    cursor.execute('''SELECT * from test
-    WHERE id=''' + str(discord_id))
+    cursor.execute('''SELECT * from ''' + TABLE + ''' WHERE id=''' + str(discord_id))
 
     result = cursor.fetchone()
 
