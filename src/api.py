@@ -1,5 +1,4 @@
 import requests
-import mcstatus
 
 from constants import DD_KEY
 

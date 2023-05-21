@@ -47,6 +47,18 @@ async def vc_join(discord_id, username):
 
     return result
 
+async def joeLock():
+    conn = get_conn_from_url()
+
+    cursor = conn.cursor()
+
+    cursor.execute('SET SCHEMA \'' + SCHEMA + '\'')
+
+    cursor.execute('SELECT active from config WHERE rule=\'joeLock\'')
+
+    result = cursor.fetchone()[0]
+
+    return result
 
 async def message_received(discord_id, username):
     conn = get_conn_from_url()
