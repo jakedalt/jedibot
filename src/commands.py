@@ -60,7 +60,9 @@ def register_commands(bot):
         guild = ctx.guild
         member = guild.get_member(433429564652388364)
         role = discord.utils.get(ctx.guild.roles, name="locked")
+        role2 = discord.utils.get(ctx.guild.roles, name="unlocked")
         await member.add_roles(role, atomic=True)
+        await member.remove_roles(role2, atomic=True)
         await setJoeLock(True)
         await ctx.send('Locked and loaded.')
 
@@ -69,7 +71,9 @@ def register_commands(bot):
         guild = ctx.guild
         member = guild.get_member(433429564652388364)
         role = discord.utils.get(ctx.guild.roles, name="unlocked")
+        role2 = discord.utils.get(ctx.guild.roles, name="locked")
         await member.add_roles(role, atomic=True)
+        await member.remove_roles(role2, atomic=True)
         await setJoeLock(False)
         await ctx.send('Freedom itself was attacked this morning by a faceless coward, and freedom will be defended. '
                        '-George W. Bush')
