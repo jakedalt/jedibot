@@ -2,7 +2,7 @@ import discord
 
 from discord.ext import tasks
 from api import background_check
-from db_util import message_received, vc_join
+from db_util import message_received, vc_join, joeLock
 from constants import GREETINGS
 
 
@@ -19,8 +19,21 @@ def register_events(bot):
         print('Connected to the following server(s):')
         for guild in bot.guilds:
             print(f"\t{guild.name} (id '{guild.id}')")
+
+        jl = await joeLock()
+        print('JoeLock Rule: ' + str(jl))
         print("Ready for action!\n")
         daily_job.start()
+
+    @bot.event
+    async def on_member_update(before, after):
+        jl = await joeLock()
+        print(jl)
+        if before.id == 433429564652388364 and jl:
+            try:
+                await after.edit(nick=before.nick)
+            except discord.errors.Forbidden:
+                print('Unable, 503, joeLock')
 
     @bot.event
     async def on_guild_join(guild):

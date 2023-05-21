@@ -5,7 +5,7 @@ import discord
 
 from discord.ext import commands
 from api import background_check, kanye
-from db_util import get_user_stats
+from db_util import get_user_stats, setJoeLock
 from youtube_player import geturl
 from constants import ENVIRONMENT
 
@@ -52,6 +52,17 @@ def register_commands(bot):
             value="For commands, type `jedi help`.\n\n*Isn't this beautiful?*"
         )
         await ctx.send(embed=embed)
+
+    @bot.command(name='lockjoe')
+    async def lockjoe(ctx):
+        await setJoeLock(True)
+        await ctx.send('Locked and loaded.')
+
+    @bot.command(name='unlockjoe')
+    async def unlockjoe(ctx):
+        await setJoeLock(False)
+        await ctx.send('Freedom itself was attacked this morning by a faceless coward, and freedom will be defended. '
+                       '-George W. Bush')
 
     @bot.command(name='stats')
     async def jedi_stats(ctx):
