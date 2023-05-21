@@ -26,16 +26,6 @@ def register_events(bot):
         daily_job.start()
 
     @bot.event
-    async def on_member_update(before, after):
-        jl = await joeLock()
-        print(jl)
-        if before.id == 433429564652388364 and jl:
-            try:
-                await after.edit(nick=before.nick)
-            except discord.errors.Forbidden:
-                print('Unable, 503, joeLock')
-
-    @bot.event
     async def on_guild_join(guild):
         if guild.id == 425799350573334528 or guild.id == 1003874309640564847:
             print('added to familiar guild')
