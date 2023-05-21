@@ -4,6 +4,8 @@ import traceback
 import discord
 
 from discord.ext import commands
+from discord.utils import get
+
 from api import background_check, kanye
 from db_util import get_user_stats, setJoeLock
 from youtube_player import geturl
@@ -55,11 +57,19 @@ def register_commands(bot):
 
     @bot.command(name='lockjoe')
     async def lockjoe(ctx):
+        guild = ctx.guild
+        member = guild.get_member(433429564652388364)
+        role = discord.utils.get(ctx.guild.roles, name="locked")
+        await member.add_roles(role, atomic=True)
         await setJoeLock(True)
         await ctx.send('Locked and loaded.')
 
     @bot.command(name='unlockjoe')
     async def unlockjoe(ctx):
+        guild = ctx.guild
+        member = guild.get_member(433429564652388364)
+        role = discord.utils.get(ctx.guild.roles, name="unlocked")
+        await member.add_roles(role, atomic=True)
         await setJoeLock(False)
         await ctx.send('Freedom itself was attacked this morning by a faceless coward, and freedom will be defended. '
                        '-George W. Bush')
