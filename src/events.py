@@ -145,15 +145,15 @@ def register_events(bot):
                 print('Joey Bingo Starting')
                 for member_in_channel in after.channel.members:
                     print(member_in_channel)
-                    print(member_in_channel in JOEY_BINGO_PARTICIPANTS)
-                    if member_in_channel in JOEY_BINGO_PARTICIPANTS:
+                    print(member_in_channel.id in JOEY_BINGO_PARTICIPANTS)
+                    if member_in_channel.id in JOEY_BINGO_PARTICIPANTS:
                         await member_in_channel.send(
                             f"Hey {member_in_channel.mention}, Joey has arrived in {after.channel.name}! It's time for Joey Bingo: \n\nhttps://bingobaker.com/#678d8de28fd26009\n\nTalk to JD to opt out.")
 
             if member.id in JOEY_BINGO_PARTICIPANTS:
                 joeyPresent = False
                 for member_in_channel in after.channel.members:
-                    if member_in_channel == 377627433739878400:
+                    if member_in_channel.id == 377627433739878400:
                         joeyPresent = True
                 if joeyPresent:
                     print('Joey Bingo Player Added')
