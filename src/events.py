@@ -5,7 +5,8 @@ from api import background_check
 from db_util import message_received, vc_join, joeLock
 from constants import GREETINGS
 
-JOEY_BINGO_PARTICIPANTS = [263361715712950272, 377627433739878400, 263345572155490304, 205416635207647233, 391374975438684170]
+JOEY_BINGO_PARTICIPANTS = [263361715712950272, 377627433739878400, 263345572155490304, 205416635207647233, 391374975438684170,
+                           425088963087302657, 195741372605661186, 503718307833184261, 431255361224310784]
 
 
 @tasks.loop(hours=24)
@@ -143,11 +144,9 @@ def register_events(bot):
             if not member.bot:
                 await vc_join(member.id, member.name)
 
-            if member.id == 377627433739878400:
+            if member.id == 433429564652388364:
                 print('Joey Bingo Starting')
                 for member_in_channel in after.channel.members:
-                    print(member_in_channel)
-                    print(member_in_channel.id in JOEY_BINGO_PARTICIPANTS)
                     if member_in_channel.id in JOEY_BINGO_PARTICIPANTS:
                         await member_in_channel.send(
                             f"Hey {member_in_channel.mention}, Joey has arrived in {after.channel.name}! It's time for Joey Bingo: \n\nhttps://bingobaker.com/#678d8de28fd26009\n\nTalk to JD to opt out.")
@@ -155,7 +154,7 @@ def register_events(bot):
             if member.id in JOEY_BINGO_PARTICIPANTS:
                 joeyPresent = False
                 for member_in_channel in after.channel.members:
-                    if member_in_channel.id == 377627433739878400:
+                    if member_in_channel.id == 433429564652388364:
                         joeyPresent = True
                 if joeyPresent:
                     print('Joey Bingo Player Added')
