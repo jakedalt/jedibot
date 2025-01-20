@@ -148,7 +148,7 @@ def register_events(bot):
                     for member_in_channel in after.channel.members:
                         if member_in_channel.id in JOEY_BINGO_PARTICIPANTS:
                             await member_in_channel.send(
-                                f"Hey {member_in_channel.mention}, Joey has arrived in {after.channel.name}! It's time for Joey Bingo: \n\nhttps://bingobaker.com/#678d8de28fd26009\n\nTalk to JD to opt out.")
+                                f"Hey {member_in_channel.mention}, Joey has arrived in {after.channel.name}! It's time for Joey Bingo: \n\nhttps://bingobaker.com/#678d8de28fd26009\n\nTalk to JD to opt out, and Jacob to alter the squares")
 
                 if member.id in JOEY_BINGO_PARTICIPANTS:
                     joeyPresent = False
@@ -156,9 +156,9 @@ def register_events(bot):
                         if member_in_channel.id == 433429564652388364:
                             joeyPresent = True
                     if joeyPresent:
-                        print('Joey Bingo Player Added')
+                        print('Joey Bingo Player Added: ' + member.name)
                         await member.send(
-                            f"Hey {member.mention}, Joey is in {after.channel.name}! It's time for Joey Bingo: \n\nhttps://bingobaker.com/#678d8de28fd26009\n\nTalk to JD to opt out.")
+                            f"Hey {member.mention}, Joey is in {after.channel.name}! It's time for Joey Bingo: \n\nhttps://bingobaker.com/#678d8de28fd26009\n\nTalk to JD to opt out, and Jacob to alter the squares.")
 
                 for role in after.channel.guild.roles:
                     if role.name == 'AFK':
