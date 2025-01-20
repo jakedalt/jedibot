@@ -90,56 +90,56 @@ def register_events(bot):
         ivc = False
         afk = False
 
-        if before.channel.id != after.channel.id:
-            if after.channel is None:
-                preposition = before
-            else:
-                preposition = after
+        if after.channel is None:
+            preposition = before
+        else:
+            preposition = after
 
-            for role in preposition.channel.guild.roles:
+        for role in preposition.channel.guild.roles:
+            if role.name == 'In Voice Channel':
+                ivc = True
+                afk = True
+        if not ivc:
+            await preposition.channel.guild.create_role(
+                name='In Voice Channel',
+                permissions=discord.Permissions.none(),
+                colour=discord.Colour(0x2ecc71),
+                hoist=True,
+                mentionable=True,
+                reason='IVC needed'
+            )
+        if not afk:
+            await preposition.channel.guild.create_role(
+                name='AFK',
+                permissions=discord.Permissions.none(),
+                colour=discord.Colour(0xbf0000),
+                hoist=True,
+                mentionable=True,
+                reason='AFK needed'
+            )
+
+        if after.channel is None:
+            for role in before.channel.guild.roles:
                 if role.name == 'In Voice Channel':
-                    ivc = True
-                    afk = True
-            if not ivc:
-                await preposition.channel.guild.create_role(
-                    name='In Voice Channel',
-                    permissions=discord.Permissions.none(),
-                    colour=discord.Colour(0x2ecc71),
-                    hoist=True,
-                    mentionable=True,
-                    reason='IVC needed'
-                )
-            if not afk:
-                await preposition.channel.guild.create_role(
-                    name='AFK',
-                    permissions=discord.Permissions.none(),
-                    colour=discord.Colour(0xbf0000),
-                    hoist=True,
-                    mentionable=True,
-                    reason='AFK needed'
-                )
+                    await member.remove_roles(role, reason='Left voice')
+                if role.name == 'AFK':
+                    await member.remove_roles(role, reason='Left AFk')
 
-            if after.channel is None:
-                for role in before.channel.guild.roles:
-                    if role.name == 'In Voice Channel':
-                        await member.remove_roles(role, reason='Left voice')
-                    if role.name == 'AFK':
-                        await member.remove_roles(role, reason='Left AFk')
+        elif after.channel.id == 672976147218300951:
+            if not member.bot:
+                await vc_join(member.id, member.name)
+            for role in after.channel.guild.roles:
+                if role.name == 'In Voice Channel':
+                    await member.remove_roles(role, reason='Left voice')
 
-            elif after.channel.id == 672976147218300951:
-                if not member.bot:
-                    await vc_join(member.id, member.name)
-                for role in after.channel.guild.roles:
-                    if role.name == 'In Voice Channel':
-                        await member.remove_roles(role, reason='Left voice')
+                afk_role = None
+                for role1 in after.channel.guild.roles:
+                    if role1.name == 'AFK':
+                        afk_role = role1
+            await member.add_roles(afk_role, reason='Joined AFK')
 
-                    afk_role = None
-                    for role1 in after.channel.guild.roles:
-                        if role1.name == 'AFK':
-                            afk_role = role1
-                await member.add_roles(afk_role, reason='Joined AFK')
-
-            else:
+        else:
+            if before.channel is not None and after.channel is not None and (before.channel.id != after.channel.id):
                 if not member.bot:
                     await vc_join(member.id, member.name)
 
