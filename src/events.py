@@ -140,9 +140,12 @@ def register_events(bot):
         else:
             if not member.bot:
                 await vc_join(member.id, member.name)
+
             if member.id == 377627433739878400:
                 print('Joey Bingo Starting')
                 for member_in_channel in after.channel.members:
+                    print(member_in_channel)
+                    print(member_in_channel in JOEY_BINGO_PARTICIPANTS)
                     if member_in_channel in JOEY_BINGO_PARTICIPANTS:
                         await member_in_channel.send(
                             f"Hey {member_in_channel.mention}, Joey has arrived in {after.channel.name}! It's time for Joey Bingo: \n\nhttps://bingobaker.com/#678d8de28fd26009\n\nTalk to JD to opt out.")
