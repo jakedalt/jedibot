@@ -89,6 +89,8 @@ def register_events(bot):
         ivc = False
         afk = False
 
+        print("VC Join. B: " + before.channel.name + " A: " + after.channel.name)
+
         if after.channel is None:
             preposition = before
         else:
