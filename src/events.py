@@ -3,7 +3,9 @@ import discord
 from discord.ext import tasks
 from api import background_check
 from db_util import message_received, vc_join, joeLock
-from constants import GREETINGS, JOEY_BINGO_PARTICIPANTS
+from constants import GREETINGS
+
+JOEY_BINGO_PARTICIPANTS = [263361715712950272, 377627433739878400, 263345572155490304, 205416635207647233, 391374975438684170]
 
 
 @tasks.loop(hours=24)
@@ -140,12 +142,20 @@ def register_events(bot):
                 await vc_join(member.id, member.name)
             if member.id == 377627433739878400:
                 print('Joey Bingo Starting')
-                await member.send(
-                    f"Hey {member.mention}, Joey has arrived in {after.channel.name}! It's time for Joey Bingo: \nhttps://bingobaker.com/#678d8de28fd26009\nhttps://bingobaker.com/#678d8de28fd26009\n\nTalk to JD to opt out.")
                 for member_in_channel in after.channel.members:
                     if member_in_channel in JOEY_BINGO_PARTICIPANTS:
                         await member_in_channel.send(
-                            f"Hey {member_in_channel.mention}, Joey has arrived in {after.channel.name}! It's time for Joey Bingo: \nhttps://bingobaker.com/#678d8de28fd26009\nhttps://bingobaker.com/#678d8de28fd26009\n\nTalk to JD to opt out.")
+                            f"Hey {member_in_channel.mention}, Joey has arrived in {after.channel.name}! It's time for Joey Bingo: \n\nhttps://bingobaker.com/#678d8de28fd26009\n\nTalk to JD to opt out.")
+
+            if member.id in JOEY_BINGO_PARTICIPANTS:
+                joeyPresent = False
+                for member_in_channel in after.channel.members:
+                    if member_in_channel == 377627433739878400:
+                        joeyPresent = True
+                if joeyPresent:
+                    print('Joey Bingo Player Added')
+                    await member.send(
+                        f"Hey {member.mention}, Joey is in {after.channel.name}! It's time for Joey Bingo: \n\nhttps://bingobaker.com/#678d8de28fd26009\n\nTalk to JD to opt out.")
 
             for role in after.channel.guild.roles:
                 if role.name == 'AFK':

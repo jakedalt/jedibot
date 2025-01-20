@@ -14,8 +14,6 @@ TABLE = os.getenv('TABLE')
 
 GREETINGS = ['hello', 'hi', 'hey', 'yo']
 
-JOEY_BINGO_PARTICIPANTS = [263361715712950272, 377627433739878400]
-
 
 
 
