@@ -90,83 +90,82 @@ def register_events(bot):
         ivc = False
         afk = False
 
-        print("VC Join. B: " + before.channel.name + " A: " + after.channel.name)
+        if before.channel.id != after.channel.id:
+            if after.channel is None:
+                preposition = before
+            else:
+                preposition = after
 
-        if after.channel is None:
-            preposition = before
-        else:
-            preposition = after
-
-        for role in preposition.channel.guild.roles:
-            if role.name == 'In Voice Channel':
-                ivc = True
-                afk = True
-        if not ivc:
-            await preposition.channel.guild.create_role(
-                name='In Voice Channel',
-                permissions=discord.Permissions.none(),
-                colour=discord.Colour(0x2ecc71),
-                hoist=True,
-                mentionable=True,
-                reason='IVC needed'
-            )
-        if not afk:
-            await preposition.channel.guild.create_role(
-                name='AFK',
-                permissions=discord.Permissions.none(),
-                colour=discord.Colour(0xbf0000),
-                hoist=True,
-                mentionable=True,
-                reason='AFK needed'
-            )
-
-        if after.channel is None:
-            for role in before.channel.guild.roles:
+            for role in preposition.channel.guild.roles:
                 if role.name == 'In Voice Channel':
-                    await member.remove_roles(role, reason='Left voice')
-                if role.name == 'AFK':
-                    await member.remove_roles(role, reason='Left AFk')
+                    ivc = True
+                    afk = True
+            if not ivc:
+                await preposition.channel.guild.create_role(
+                    name='In Voice Channel',
+                    permissions=discord.Permissions.none(),
+                    colour=discord.Colour(0x2ecc71),
+                    hoist=True,
+                    mentionable=True,
+                    reason='IVC needed'
+                )
+            if not afk:
+                await preposition.channel.guild.create_role(
+                    name='AFK',
+                    permissions=discord.Permissions.none(),
+                    colour=discord.Colour(0xbf0000),
+                    hoist=True,
+                    mentionable=True,
+                    reason='AFK needed'
+                )
 
-        elif after.channel.id == 672976147218300951:
-            if not member.bot:
-                await vc_join(member.id, member.name)
-            for role in after.channel.guild.roles:
-                if role.name == 'In Voice Channel':
-                    await member.remove_roles(role, reason='Left voice')
+            if after.channel is None:
+                for role in before.channel.guild.roles:
+                    if role.name == 'In Voice Channel':
+                        await member.remove_roles(role, reason='Left voice')
+                    if role.name == 'AFK':
+                        await member.remove_roles(role, reason='Left AFk')
 
-                afk_role = None
-                for role1 in after.channel.guild.roles:
-                    if role1.name == 'AFK':
-                        afk_role = role1
-            await member.add_roles(afk_role, reason='Joined AFK')
+            elif after.channel.id == 672976147218300951:
+                if not member.bot:
+                    await vc_join(member.id, member.name)
+                for role in after.channel.guild.roles:
+                    if role.name == 'In Voice Channel':
+                        await member.remove_roles(role, reason='Left voice')
 
-        else:
-            if not member.bot:
-                await vc_join(member.id, member.name)
+                    afk_role = None
+                    for role1 in after.channel.guild.roles:
+                        if role1.name == 'AFK':
+                            afk_role = role1
+                await member.add_roles(afk_role, reason='Joined AFK')
 
-            if member.id == 433429564652388364:
-                print('Joey Bingo Starting')
-                for member_in_channel in after.channel.members:
-                    if member_in_channel.id in JOEY_BINGO_PARTICIPANTS:
-                        await member_in_channel.send(
-                            f"Hey {member_in_channel.mention}, Joey has arrived in {after.channel.name}! It's time for Joey Bingo: \n\nhttps://bingobaker.com/#678d8de28fd26009\n\nTalk to JD to opt out.")
+            else:
+                if not member.bot:
+                    await vc_join(member.id, member.name)
 
-            if member.id in JOEY_BINGO_PARTICIPANTS:
-                joeyPresent = False
-                for member_in_channel in after.channel.members:
-                    if member_in_channel.id == 433429564652388364:
-                        joeyPresent = True
-                if joeyPresent:
-                    print('Joey Bingo Player Added')
-                    await member.send(
-                        f"Hey {member.mention}, Joey is in {after.channel.name}! It's time for Joey Bingo: \n\nhttps://bingobaker.com/#678d8de28fd26009\n\nTalk to JD to opt out.")
+                if member.id == 433429564652388364:
+                    print('Joey Bingo Starting')
+                    for member_in_channel in after.channel.members:
+                        if member_in_channel.id in JOEY_BINGO_PARTICIPANTS:
+                            await member_in_channel.send(
+                                f"Hey {member_in_channel.mention}, Joey has arrived in {after.channel.name}! It's time for Joey Bingo: \n\nhttps://bingobaker.com/#678d8de28fd26009\n\nTalk to JD to opt out.")
 
-            for role in after.channel.guild.roles:
-                if role.name == 'AFK':
-                    await member.remove_roles(role, reason='Left AFk')
+                if member.id in JOEY_BINGO_PARTICIPANTS:
+                    joeyPresent = False
+                    for member_in_channel in after.channel.members:
+                        if member_in_channel.id == 433429564652388364:
+                            joeyPresent = True
+                    if joeyPresent:
+                        print('Joey Bingo Player Added')
+                        await member.send(
+                            f"Hey {member.mention}, Joey is in {after.channel.name}! It's time for Joey Bingo: \n\nhttps://bingobaker.com/#678d8de28fd26009\n\nTalk to JD to opt out.")
 
-                ivc_role = None
-                for role1 in after.channel.guild.roles:
-                    if role1.name == 'In Voice Channel':
-                        ivc_role = role1
-            await member.add_roles(ivc_role, reason='Joined voice')
+                for role in after.channel.guild.roles:
+                    if role.name == 'AFK':
+                        await member.remove_roles(role, reason='Left AFk')
+
+                    ivc_role = None
+                    for role1 in after.channel.guild.roles:
+                        if role1.name == 'In Voice Channel':
+                            ivc_role = role1
+                await member.add_roles(ivc_role, reason='Joined voice')
