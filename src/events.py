@@ -3,7 +3,7 @@ import discord
 from discord.ext import tasks
 from api import background_check
 from db_util import message_received, vc_join, joeLock
-from constants import GREETINGS
+from constants import GREETINGS, JOEY_BINGO_PARTICIPANTS
 
 
 @tasks.loop(hours=24)
@@ -36,36 +36,36 @@ def register_events(bot):
             print('added to unfamiliar guild ' + str(guild) + ': owner:' + str(guild.owner) + '\n' + str(guild.members))
             await guild.leave()
 
-    @bot.event
-    async def on_member_join(member):
-        report = background_check(member.id)
-        if not report['blacklisted']:
-            if report['reports'] == 0:
-                await member.create_dm()
-                await member.dm_channel.send(
-                    f'Hello there, {member.name}! True Jedi welcomes you.'
-                )
-                channel = member.guild.text_channels[0]
-                if channel is not None:
-                    channel.send('Everyone welcome ' +
-                                 member.name + ' to True Jedi! They passed my background check with flying colors.')
-            else:
-                await member.create_dm()
-                await member.dm_channel.send(
-                    f'Hello there, {member.name}! True Jedi welcomes you. You do have some reports, but if you are well-'
-                    f'behaved, we will love having you on True Jedi'
-                )
-                channel = member.guild.text_channels[0]
-                if channel is not None:
-                    channel.send(member.name + ' has joined True Jedi. My background check dug up ' +
-                                 str(report['reports']) +
-                                 ' reports. There is a good chance that these reports were not substantial.')
-        else:
-            channel = member.guild.text_channels[0]
-            if channel is not None:
-                channel.send('***WARNING!***')
-                channel.send('WARNING! ' + member.name + 'is known to be a dangerous and blacklisted Discord user with '
-                             + str(report['reports']) + '. Blacklist reason: ' + str(report['blacklist_reason']))
+    # @bot.event
+    # async def on_member_join(member):
+    #     report = background_check(member.id)
+    #     if not report['blacklisted']:
+    #         if report['reports'] == 0:
+    #             await member.create_dm()
+    #             await member.dm_channel.send(
+    #                 f'Hello there, {member.name}! True Jedi welcomes you.'
+    #             )
+    #             channel = member.guild.text_channels[0]
+    #             if channel is not None:
+    #                 channel.send('Everyone welcome ' +
+    #                              member.name + ' to True Jedi! They passed my background check with flying colors.')
+    #         else:
+    #             await member.create_dm()
+    #             await member.dm_channel.send(
+    #                 f'Hello there, {member.name}! True Jedi welcomes you. You do have some reports, but if you are well-'
+    #                 f'behaved, we will love having you on True Jedi'
+    #             )
+    #             channel = member.guild.text_channels[0]
+    #             if channel is not None:
+    #                 channel.send(member.name + ' has joined True Jedi. My background check dug up ' +
+    #                              str(report['reports']) +
+    #                              ' reports. There is a good chance that these reports were not substantial.')
+    #     else:
+    #         channel = member.guild.text_channels[0]
+    #         if channel is not None:
+    #             channel.send('***WARNING!***')
+    #             channel.send('WARNING! ' + member.name + 'is known to be a dangerous and blacklisted Discord user with '
+    #                          + str(report['reports']) + '. Blacklist reason: ' + str(report['blacklist_reason']))
 
     @bot.event
     async def on_message(message: discord.Message) -> None:
@@ -119,7 +119,6 @@ def register_events(bot):
             for role in before.channel.guild.roles:
                 if role.name == 'In Voice Channel':
                     await member.remove_roles(role, reason='Left voice')
-            for role in before.channel.guild.roles:
                 if role.name == 'AFK':
                     await member.remove_roles(role, reason='Left AFk')
 
@@ -139,6 +138,15 @@ def register_events(bot):
         else:
             if not member.bot:
                 await vc_join(member.id, member.name)
+            if member.id == 377627433739878400:
+                print('Joey Bingo Starting')
+                await member.send(
+                    f"Hey {member.mention}, Joey has arrived in {after.channel.name}! It's time for Joey Bingo: \nhttps://bingobaker.com/#678d8de28fd26009\nhttps://bingobaker.com/#678d8de28fd26009\n\nTalk to JD to opt out.")
+                for member_in_channel in after.channel.members:
+                    if member_in_channel in JOEY_BINGO_PARTICIPANTS:
+                        await member_in_channel.send(
+                            f"Hey {member_in_channel.mention}, Joey has arrived in {after.channel.name}! It's time for Joey Bingo: \nhttps://bingobaker.com/#678d8de28fd26009\nhttps://bingobaker.com/#678d8de28fd26009\n\nTalk to JD to opt out.")
+
             for role in after.channel.guild.roles:
                 if role.name == 'AFK':
                     await member.remove_roles(role, reason='Left AFk')
