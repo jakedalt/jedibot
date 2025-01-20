@@ -139,7 +139,7 @@ def register_events(bot):
             await member.add_roles(afk_role, reason='Joined AFK')
 
         else:
-            if before.channel is not None and after.channel is not None and (before.channel.id != after.channel.id):
+            if (before.channel is None or after.channel is None) or (before.channel.id != after.channel.id):
                 if not member.bot:
                     await vc_join(member.id, member.name)
 
